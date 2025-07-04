@@ -7,38 +7,51 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                // 타이머 지속시간 설정
-                timerDurationSection
-                
-                // 알림 설정
-                notificationSection
-                
-                // 앰비언트 사운드 설정
-                ambientSoundSection
-                
-                // 고급 설정
-                advancedSection
-                
-                // 액션 버튼들
-                actionSection
+            ScrollView {
+                VStack(spacing: 20) {
+                    // 타이머 지속시간 설정
+                    timerDurationSection
+                    
+                    // 알림 설정
+                    notificationSection
+                    
+                    // 앰비언트 사운드 설정
+                    ambientSoundSection
+                    
+                    // 고급 설정
+                    advancedSection
+                    
+                    // 액션 버튼들
+                    actionSection
+                }
+                .padding()
             }
-            .formStyle(.grouped)
             .navigationTitle("Settings")
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        // 변경사항 취소 (원래 설정으로 복원)
+                        settingsViewModel.loadSettings()
                         dismiss()
                     }
                 }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        // 설정 저장
+                        settingsViewModel.saveSettings()
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
             }
         }
-        .frame(width: 500, height: 600)
+        .frame(minWidth: 500, minHeight: 600)
     }
     
     // MARK: - Timer Duration Section
     private var timerDurationSection: some View {
-        Section("Timer Durations") {
+        GroupBox("Timer Durations") {
             HStack {
                 Text("Work Duration")
                 Spacer()
@@ -82,7 +95,7 @@ struct SettingsView: View {
     
     // MARK: - Notification Section
     private var notificationSection: some View {
-        Section("Notifications") {
+        GroupBox("Notifications") {
             Toggle("Enable Notifications", isOn: $settingsViewModel.settings.enableNotifications)
             
             if settingsViewModel.settings.enableNotifications {
@@ -90,13 +103,15 @@ struct SettingsView: View {
                     HStack {
                         Text("Notification Sound")
                         Spacer()
-                        Picker("", selection: $settingsViewModel.settings.notificationSound) {
+                        Picker("Bell", selection: $settingsViewModel.settings.notificationSound) {
                             ForEach(NotificationSound.allCases, id: \.self) { sound in
                                 Text(sound.displayName).tag(sound)
                             }
                         }
                         .pickerStyle(.menu)
                         .frame(width: 150)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(6)
                     }
                     
                     if settingsViewModel.settings.notificationSound != .none {
@@ -109,24 +124,38 @@ struct SettingsView: View {
                 }
             }
             
-            Toggle("Focus Mode", isOn: $settingsViewModel.settings.enableFocusMode)
-                .help("Activates macOS Focus mode during work sessions")
+            // Focus Mode - 주석처리 (유료 기능)
+            /*
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Focus Mode", isOn: $settingsViewModel.settings.enableFocusMode)
+                    .help("Activates macOS Focus mode during work sessions")
+                
+                if settingsViewModel.settings.enableFocusMode {
+                    Text("⚠️ First time setup requires granting automation permission in System Preferences")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                        .padding(.leading, 20)
+                }
+            }
             
             if settingsViewModel.settings.enableFocusMode {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("macOS Focus Mode")
-                        Spacer()
-                        Picker("", selection: $settingsViewModel.settings.macOSFocusMode) {
-                            ForEach(MacOSFocusMode.allCases, id: \.self) { mode in
-                                Text(mode.displayName).tag(mode)
-                            }
+                Divider()
+                
+                HStack {
+                    Text("macOS Focus Mode")
+                    Spacer()
+                    Picker("", selection: $settingsViewModel.settings.macOSFocusMode) {
+                        ForEach(MacOSFocusMode.allCases, id: \.self) { mode in
+                            Text(mode.displayName).tag(mode)
                         }
-                        .pickerStyle(.menu)
-                        .frame(width: 150)
                     }
-                    
-                    if settingsViewModel.settings.macOSFocusMode != .none {
+                    .pickerStyle(.menu)
+                    .frame(width: 150)
+                }
+                
+                if settingsViewModel.settings.macOSFocusMode != .none {
+                    HStack {
+                        Spacer()
                         Button("🎯 Test Focus Mode") {
                             FocusManager.shared.activateFocusMode(settingsViewModel.settings.macOSFocusMode)
                         }
@@ -135,26 +164,32 @@ struct SettingsView: View {
                     }
                 }
             }
+            */
             
+            // Distraction Alerts - 주석처리 (불필요)
+            /*
             Toggle("Distraction Alerts", isOn: $settingsViewModel.settings.enableDistractionAlerts)
                 .help("Shows periodic reminders to stay focused")
+            */
         }
     }
     
     // MARK: - Ambient Sound Section
     private var ambientSoundSection: some View {
-        Section("Ambient Sound") {
+        GroupBox("Ambient Sound") {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text("Ambient Sound")
                     Spacer()
-                    Picker("", selection: $settingsViewModel.settings.ambientSound) {
+                    Picker("Sound", selection: $settingsViewModel.settings.ambientSound) {
                         ForEach(AmbientSound.allCases, id: \.self) { sound in
                             Text(sound.displayName).tag(sound)
                         }
                     }
                     .pickerStyle(.menu)
                     .frame(width: 150)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
                 }
                 
                 if settingsViewModel.settings.ambientSound != .none {
@@ -185,7 +220,7 @@ struct SettingsView: View {
     
     // MARK: - Advanced Section
     private var advancedSection: some View {
-        Section("Advanced") {
+        GroupBox("Advanced") {
             Toggle("Menu Bar App", isOn: $settingsViewModel.settings.enableMenuBarApp)
                 .help("Run the app in the menu bar")
             
@@ -201,7 +236,7 @@ struct SettingsView: View {
     
     // MARK: - Action Section
     private var actionSection: some View {
-        Section {
+        GroupBox {
             HStack {
                 Spacer()
                 

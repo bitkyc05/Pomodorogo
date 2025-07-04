@@ -165,9 +165,19 @@ struct WorkAreaSelectionView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Text("Work Areas")
-                .font(.title2)
-                .fontWeight(.bold)
+            HStack {
+                Text("Work Areas")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Spacer()
+                
+                Button("✕") {
+                    dismiss()
+                }
+                .buttonStyle(.borderless)
+                .foregroundColor(.secondary)
+            }
             
             // 새 작업 영역 추가
             HStack {

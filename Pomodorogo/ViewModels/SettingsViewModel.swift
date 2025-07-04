@@ -98,14 +98,10 @@ class SettingsViewModel: ObservableObject {
     
     // MARK: - Initialization
     init() {
-        loadSettings()
+        loadSettingsInternal()
         
-        // 설정 변경 시 자동 저장
-        $settings
-            .sink { [weak self] _ in
-                self?.saveSettings()
-            }
-            .store(in: &cancellables)
+        // 설정 변경 시 자동 저장 비활성화 (명시적 저장으로 변경)
+        // 사용자가 Save 버튼을 눌렀을 때만 저장되도록 함
     }
     
     // MARK: - Duration Helpers
@@ -159,8 +155,21 @@ class SettingsViewModel: ObservableObject {
         SoundManager.shared.playAmbientSoundPreview(settings.ambientSound, volume: Float(settings.ambientVolume))
     }
     
+    // MARK: - Public Methods
+    func saveSettings() {
+        saveSettingsInternal()
+        // 타이머 ViewModel에게 설정 변경 알림
+        NotificationCenter.default.post(name: .settingsDidChange, object: settings)
+    }
+    
+    func loadSettings() {
+        loadSettingsInternal()
+        // UI 업데이트를 위해 objectWillChange 신호 전송
+        objectWillChange.send()
+    }
+    
     // MARK: - Data Persistence
-    private func loadSettings() {
+    private func loadSettingsInternal() {
         // 기본값들
         settings.workDuration = userDefaults.object(forKey: "workDuration") as? Int ?? 25 * 60
         settings.shortBreakDuration = userDefaults.object(forKey: "shortBreakDuration") as? Int ?? 5 * 60
@@ -192,7 +201,7 @@ class SettingsViewModel: ObservableObject {
         settings.enableGlobalShortcuts = userDefaults.object(forKey: "enableGlobalShortcuts") as? Bool ?? true
     }
     
-    private func saveSettings() {
+    private func saveSettingsInternal() {
         // 기본값들
         userDefaults.set(settings.workDuration, forKey: "workDuration")
         userDefaults.set(settings.shortBreakDuration, forKey: "shortBreakDuration")

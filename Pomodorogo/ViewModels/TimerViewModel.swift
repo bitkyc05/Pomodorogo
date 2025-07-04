@@ -42,6 +42,7 @@ class TimerViewModel: ObservableObject {
     private var timer: Timer?
     private var sessionStartTime: Date?
     private var sessionLogs: [PomodoroSession] = []
+    private var cancellables = Set<AnyCancellable>()
     
     // 모드별 지속시간 설정
     private var modeDurations: [TimerMode: Int] = [
@@ -56,6 +57,13 @@ class TimerViewModel: ObservableObject {
         loadSettings()
         loadStats()
         loadWorkAreas()
+        
+        // 설정 변경 알림 구독
+        NotificationCenter.default.publisher(for: .settingsDidChange)
+            .sink { [weak self] _ in
+                self?.loadSettings()
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Timer Control Methods

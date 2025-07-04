@@ -22,6 +22,13 @@ struct ReviewView: View {
             }
             .navigationTitle("📝 Daily Review")
             .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("✕") {
+                        dismiss()
+                    }
+                    .buttonStyle(.borderless)
+                }
+                
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
                         dismiss()
@@ -35,7 +42,7 @@ struct ReviewView: View {
                 }
             }
         }
-        .frame(width: 600, height: 700)
+        .frame(minWidth: 600, minHeight: 700)
         .onAppear {
             selectedDate = Date()
             reviewViewModel.selectDate(selectedDate)

@@ -12,6 +12,7 @@ struct PomodorogoApp: App {
     @StateObject private var timerViewModel = TimerViewModel()
     @StateObject private var settingsViewModel = SettingsViewModel()
     @StateObject private var reviewViewModel = ReviewViewModel()
+    @StateObject private var focusManager = FocusManager.shared
     
     var body: some Scene {
         WindowGroup {
@@ -19,6 +20,11 @@ struct PomodorogoApp: App {
                 .environmentObject(timerViewModel)
                 .environmentObject(settingsViewModel)
                 .environmentObject(reviewViewModel)
+                .environmentObject(focusManager)
+                .onAppear {
+                    // Request notification permission
+                    focusManager.requestNotificationPermission()
+                }
         }
         .windowResizability(.contentSize)
         .defaultSize(width: 480, height: 700)
