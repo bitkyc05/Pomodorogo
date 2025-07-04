@@ -1,6 +1,35 @@
 import Foundation
 import Combine
 
+// MARK: - macOS 집중 모드 열거형
+enum MacOSFocusMode: String, CaseIterable {
+    case none = "none"
+    case doNotDisturb = "do-not-disturb"
+    case personal = "personal"
+    case work = "work"
+    case sleep = "sleep"
+    
+    var displayName: String {
+        switch self {
+        case .none: return "사용 안함"
+        case .doNotDisturb: return "방해 금지"
+        case .personal: return "개인 시간"
+        case .work: return "업무"
+        case .sleep: return "수면"
+        }
+    }
+    
+    var identifier: String? {
+        switch self {
+        case .none: return nil
+        case .doNotDisturb: return "com.apple.donotdisturb.mode.default"
+        case .personal: return "com.apple.donotdisturb.mode.personal"
+        case .work: return "com.apple.donotdisturb.mode.work"
+        case .sleep: return "com.apple.donotdisturb.mode.sleep"
+        }
+    }
+}
+
 // MARK: - 설정 모델
 struct PomodoroSettings {
     var workDuration: Int = 25 * 60      // 25분
@@ -10,6 +39,7 @@ struct PomodoroSettings {
     var notificationSound: NotificationSound = .default
     var enableNotifications: Bool = true
     var enableFocusMode: Bool = false
+    var macOSFocusMode: MacOSFocusMode = .none
     var enableDistractionAlerts: Bool = false
     
     var ambientSound: AmbientSound = .none
@@ -143,6 +173,10 @@ class SettingsViewModel: ObservableObject {
         }
         settings.enableNotifications = userDefaults.object(forKey: "enableNotifications") as? Bool ?? true
         settings.enableFocusMode = userDefaults.object(forKey: "enableFocusMode") as? Bool ?? false
+        if let focusModeRaw = userDefaults.string(forKey: "macOSFocusMode"),
+           let focusMode = MacOSFocusMode(rawValue: focusModeRaw) {
+            settings.macOSFocusMode = focusMode
+        }
         settings.enableDistractionAlerts = userDefaults.object(forKey: "enableDistractionAlerts") as? Bool ?? false
         
         // 앰비언트 사운드 설정
@@ -168,6 +202,7 @@ class SettingsViewModel: ObservableObject {
         userDefaults.set(settings.notificationSound.rawValue, forKey: "notificationSound")
         userDefaults.set(settings.enableNotifications, forKey: "enableNotifications")
         userDefaults.set(settings.enableFocusMode, forKey: "enableFocusMode")
+        userDefaults.set(settings.macOSFocusMode.rawValue, forKey: "macOSFocusMode")
         userDefaults.set(settings.enableDistractionAlerts, forKey: "enableDistractionAlerts")
         
         // 앰비언트 사운드 설정

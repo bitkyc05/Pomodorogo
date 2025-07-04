@@ -80,6 +80,7 @@ class TimerViewModel: ObservableObject {
         }
         
         // 포커스 모드 시작 (설정에 따라)
+        startFocusModeIfNeeded()
         // 앰비언트 사운드 시작 (설정에 따라)
         startAmbientSoundIfNeeded()
         // 주의산만 알림 시작 (설정에 따라)
@@ -91,6 +92,7 @@ class TimerViewModel: ObservableObject {
         timer = nil
         
         // 포커스 모드 종료
+        stopFocusModeIfNeeded()
         // 앰비언트 사운드 정지
         SoundManager.shared.stopAmbientSound()
         // 주의산만 알림 정지
@@ -288,6 +290,26 @@ class TimerViewModel: ObservableObject {
            ambientSound != .none {
             let volume = UserDefaults.standard.object(forKey: "ambientVolume") as? Double ?? 0.5
             SoundManager.shared.startAmbientSound(ambientSound, volume: Float(volume))
+        }
+    }
+    
+    private func startFocusModeIfNeeded() {
+        // 포커스 모드 설정 확인
+        let enableFocusMode = UserDefaults.standard.bool(forKey: "enableFocusMode")
+        
+        if enableFocusMode {
+            if let focusModeRaw = UserDefaults.standard.string(forKey: "macOSFocusMode"),
+               let focusMode = MacOSFocusMode(rawValue: focusModeRaw),
+               focusMode != .none {
+                FocusManager.shared.activateFocusMode(focusMode)
+            }
+        }
+    }
+    
+    private func stopFocusModeIfNeeded() {
+        // 포커스 모드가 활성화되어 있다면 비활성화
+        if FocusManager.shared.isActiveFocusMode {
+            FocusManager.shared.deactivateFocusMode()
         }
     }
 }

@@ -110,7 +110,31 @@ struct SettingsView: View {
             }
             
             Toggle("Focus Mode", isOn: $settingsViewModel.settings.enableFocusMode)
-                .help("Shows full-screen focus overlay during work sessions")
+                .help("Activates macOS Focus mode during work sessions")
+            
+            if settingsViewModel.settings.enableFocusMode {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("macOS Focus Mode")
+                        Spacer()
+                        Picker("", selection: $settingsViewModel.settings.macOSFocusMode) {
+                            ForEach(MacOSFocusMode.allCases, id: \.self) { mode in
+                                Text(mode.displayName).tag(mode)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .frame(width: 150)
+                    }
+                    
+                    if settingsViewModel.settings.macOSFocusMode != .none {
+                        Button("🎯 Test Focus Mode") {
+                            FocusManager.shared.activateFocusMode(settingsViewModel.settings.macOSFocusMode)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                    }
+                }
+            }
             
             Toggle("Distraction Alerts", isOn: $settingsViewModel.settings.enableDistractionAlerts)
                 .help("Shows periodic reminders to stay focused")
