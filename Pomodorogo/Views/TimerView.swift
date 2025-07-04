@@ -12,7 +12,8 @@ struct TimerView: View {
             // 중앙 정보 디스플레이
             centralDisplay
         }
-        .frame(width: 320, height: 320)
+        .frame(minWidth: 280, idealWidth: 320, maxWidth: 380)
+        .aspectRatio(1, contentMode: .fit)
         .sheet(isPresented: $showingWorkAreas) {
             WorkAreaSelectionView()
         }
@@ -69,11 +70,18 @@ struct TimerView: View {
     }
     
     private var timeDisplay: some View {
-        Text(timerViewModel.formattedTime)
-            .font(.system(size: 56, weight: .bold, design: .monospaced))
-            .foregroundColor(.primary)
-            .shadow(color: currentModeColor.opacity(0.3), radius: 10)
-            .contentTransition(.numericText())
+        GeometryReader { geometry in
+            let fontSize = min(geometry.size.width * 0.18, 56)
+            Text(timerViewModel.formattedTime)
+                .font(.system(size: fontSize, weight: .bold, design: .monospaced))
+                .foregroundColor(.primary)
+                .shadow(color: currentModeColor.opacity(0.3), radius: 10)
+                .contentTransition(.numericText())
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+        }
+        .frame(height: 60)
     }
     
     private var workAreaDisplay: some View {

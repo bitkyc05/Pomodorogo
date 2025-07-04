@@ -25,6 +25,7 @@ class SoundManager: ObservableObject {
     private func setupAudioSession() {
         // macOS doesn't use AVAudioSession like iOS
         // Audio mixing is handled automatically by the system
+        // 오디오 권한 요청은 자동으로 처리됨
     }
     
     // MARK: - Notification Sounds
@@ -99,11 +100,15 @@ class SoundManager: ObservableObject {
         do {
             try audioEngine.start()
             playerNode.scheduleBuffer(buffer, at: nil, options: [], completionHandler: {
-                audioEngine.stop()
+                DispatchQueue.main.async {
+                    audioEngine.stop()
+                }
             })
             playerNode.play()
         } catch {
             print("Failed to play generated sound: \(error)")
+            // 실패 시 시스템 기본 비프음으로 대체
+            NSSound.beep()
         }
     }
     
@@ -205,6 +210,8 @@ class SoundManager: ObservableObject {
             
         } catch {
             print("Failed to start ambient sound: \(error)")
+            // 실패 시 isAmbientPlaying 상태 되돌리기
+            isAmbientPlaying = false
         }
     }
     

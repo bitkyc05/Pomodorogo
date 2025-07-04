@@ -20,5 +20,7 @@ struct PomodorogoApp: App {
                 .environmentObject(settingsViewModel)
                 .environmentObject(reviewViewModel)
         }
+        .windowResizability(.contentSize)
+        .defaultSize(width: 480, height: 700)
     }
 }

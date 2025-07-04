@@ -81,6 +81,7 @@ class TimerViewModel: ObservableObject {
         
         // 포커스 모드 시작 (설정에 따라)
         // 앰비언트 사운드 시작 (설정에 따라)
+        startAmbientSoundIfNeeded()
         // 주의산만 알림 시작 (설정에 따라)
     }
     
@@ -91,6 +92,7 @@ class TimerViewModel: ObservableObject {
         
         // 포커스 모드 종료
         // 앰비언트 사운드 정지
+        SoundManager.shared.stopAmbientSound()
         // 주의산만 알림 정지
     }
     
@@ -143,8 +145,10 @@ class TimerViewModel: ObservableObject {
         saveStats()
         
         // 알림 표시
-        // 소리 재생
         sendNotification()
+        
+        // 소리 재생
+        playSessionCompleteSound()
     }
     
     // MARK: - Mode Management
@@ -264,6 +268,27 @@ class TimerViewModel: ObservableObject {
     private func sendNotification() {
         // UserNotifications를 사용한 시스템 알림 (추후 구현)
         // NotificationManager.shared.sendSessionCompleteNotification(...)
+    }
+    
+    // MARK: - Sound Management
+    private func playSessionCompleteSound() {
+        // 현재 설정된 알림음 재생
+        if let soundRaw = UserDefaults.standard.string(forKey: "notificationSound"),
+           let sound = NotificationSound(rawValue: soundRaw) {
+            SoundManager.shared.playNotificationSound(sound)
+        } else {
+            SoundManager.shared.playNotificationSound(.default)
+        }
+    }
+    
+    private func startAmbientSoundIfNeeded() {
+        // 앰비언트 사운드 설정 확인
+        if let ambientRaw = UserDefaults.standard.string(forKey: "ambientSound"),
+           let ambientSound = AmbientSound(rawValue: ambientRaw),
+           ambientSound != .none {
+            let volume = UserDefaults.standard.object(forKey: "ambientVolume") as? Double ?? 0.5
+            SoundManager.shared.startAmbientSound(ambientSound, volume: Float(volume))
+        }
     }
 }
 

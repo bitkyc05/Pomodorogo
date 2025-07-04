@@ -18,11 +18,12 @@ struct ContentView: View {
                 
                 // 메인 컨텐츠
                 mainContent
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 40)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 30)
             }
         }
-        .frame(width: 480, height: 700)
+        .frame(minWidth: 400, idealWidth: 480, maxWidth: 600, 
+               minHeight: 600, idealHeight: 700, maxHeight: 800)
         .background(.ultraThinMaterial)
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
@@ -97,9 +98,9 @@ struct ContentView: View {
             // 모드 선택기
             modeSelector
         }
-        .padding(.top, 30)
-        .padding(.horizontal, 30)
-        .padding(.bottom, 20)
+        .padding(.top, 20)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 15)
         .background(
             LinearGradient(
                 gradient: Gradient(colors: [
@@ -221,7 +222,8 @@ struct WorkAreaSelectionView: View {
             }
         }
         .padding()
-        .frame(width: 400, height: 350)
+        .frame(minWidth: 350, idealWidth: 400, maxWidth: 500,
+               minHeight: 300, idealHeight: 350, maxHeight: 450)
     }
 }
 

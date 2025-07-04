@@ -121,12 +121,12 @@ class SettingsViewModel: ObservableObject {
     
     func playNotificationSoundPreview() {
         // SoundManager를 통해 미리듣기 구현
-        // SoundManager.shared.playNotificationSound(settings.notificationSound)
+        SoundManager.shared.playNotificationSoundPreview(settings.notificationSound)
     }
     
     func playAmbientSoundPreview() {
         // SoundManager를 통해 미리듣기 구현
-        // SoundManager.shared.playAmbientSoundPreview(settings.ambientSound, volume: settings.ambientVolume)
+        SoundManager.shared.playAmbientSoundPreview(settings.ambientSound, volume: Float(settings.ambientVolume))
     }
     
     // MARK: - Data Persistence
