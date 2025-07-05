@@ -29,8 +29,16 @@ struct ReviewView: View {
                 }
                 ToolbarItem(placement: .secondaryAction) {
                     Menu {
-                        Button("📋 Export") { 
-                            reviewViewModel.copyToClipboard() 
+                        Menu("📋 Export") {
+                            Button("📋 Copy Text") { 
+                                reviewViewModel.copyToClipboard() 
+                            }
+                            Button("📝 Copy Markdown") { 
+                                reviewViewModel.copyMarkdownToClipboard() 
+                            }
+                            Button("💾 Save as Markdown") { 
+                                reviewViewModel.saveMarkdownToFile() 
+                            }
                         }
                         Divider()
                         Button("🗑️ 데일리 삭제") { 
