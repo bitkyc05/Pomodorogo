@@ -25,8 +25,8 @@
 
 /* Begin PBXFileReference section */
 		BFF681592E1826BC0055E8A7 /* Pomodoro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pomodoro.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFF6816A2E1826BD0055E8A7 /* PomodorogoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PomodorogoTests.xctest; path = Pomodoro.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFF681742E1826BD0055E8A7 /* PomodorogoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PomodorogoUITests.xctest; path = Pomodoro.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFF6816A2E1826BD0055E8A7 /* Pomodoro.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Pomodoro.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFF681742E1826BD0055E8A7 /* Pomodoro.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Pomodoro.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -86,8 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				BFF681592E1826BC0055E8A7 /* Pomodoro.app */,
-				BFF6816A2E1826BD0055E8A7 /* PomodorogoTests.xctest */,
-				BFF681742E1826BD0055E8A7 /* PomodorogoUITests.xctest */,
+				BFF6816A2E1826BD0055E8A7 /* Pomodoro.xctest */,
+				BFF681742E1826BD0055E8A7 /* Pomodoro.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,7 +137,7 @@
 			packageProductDependencies = (
 			);
 			productName = PomodorogoTests;
-			productReference = BFF6816A2E1826BD0055E8A7 /* PomodorogoTests.xctest */;
+			productReference = BFF6816A2E1826BD0055E8A7 /* Pomodoro.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		BFF681732E1826BD0055E8A7 /* PomodorogoUITests */ = {
@@ -160,7 +160,7 @@
 			packageProductDependencies = (
 			);
 			productName = PomodorogoUITests;
-			productReference = BFF681742E1826BD0055E8A7 /* PomodorogoUITests.xctest */;
+			productReference = BFF681742E1826BD0055E8A7 /* Pomodoro.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -412,7 +412,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = bitkyc05.Pomodorogo;
 				PRODUCT_NAME = Pomodoro;
 				SDKROOT = auto;
@@ -453,7 +453,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = bitkyc05.Pomodorogo;
 				PRODUCT_NAME = Pomodoro;
 				SDKROOT = auto;

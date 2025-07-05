@@ -94,11 +94,13 @@ open Pomodorogo.xcodeproj
 5. Review your progress in the statistics section
 
 ### Keyboard Shortcuts
-- **Space**: Start/pause timer
-- **R**: Reset current session
-- **S**: Open settings
-- **V**: Open review interface
+- **Space**: Start/pause timer (global shortcut)
+- **R**: Reset current session (global shortcut)
+- **S**: Open settings (global shortcut)
+- **V**: Open review interface (global shortcut)
 - **⌘+,**: Application preferences
+
+*Note: Global shortcuts can be enabled/disabled in Settings > Advanced > Global Shortcuts*
 
 ### Work Area Management
 - Click on the work area name to switch between projects
@@ -108,7 +110,16 @@ open Pomodorogo.xcodeproj
 
 ## Version History
 
-### v0.4.1 (Current)
+### v0.5 (Current) - Keyboard Shortcuts Implementation
+- ⌨️ **Global Keyboard Shortcuts**: Implemented NSEvent-based local keyboard shortcuts
+- 🎮 **Enhanced User Control**: Space (start/pause), R (reset), S (settings), V (review)
+- 🔧 **Smart Text Field Detection**: Shortcuts disabled during text editing
+- ⚙️ **Settings Integration**: Toggle shortcuts on/off in Advanced settings
+- 🎯 **UI Indicators**: Added keyboard shortcut hints to all control buttons
+- ✅ **Comprehensive Testing**: Added KeyboardShortcutManagerTests for functionality validation
+- 📱 **App-focused Mode**: Shortcuts work when app is in focus for system safety
+
+### v0.4.1
 - 📄 Updated documentation and README
 - 🔧 Minor version maintenance update
 

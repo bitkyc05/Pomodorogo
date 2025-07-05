@@ -8,6 +8,8 @@ struct ContentView: View {
     @State private var showingWorkAreas = false
     @Environment(\.openWindow) private var openWindow
     
+    private let keyboardManager = KeyboardShortcutManager.shared
+    
     var body: some View {
         ZStack {
             // 배경 그라디언트
@@ -45,6 +47,26 @@ struct ContentView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in
             // 앱 종료 시 데이터 저장
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .toggleTimer)) { _ in
+            timerViewModel.toggleTimer()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .resetTimer)) { _ in
+            timerViewModel.resetTimer()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openSettings)) { _ in
+            showingSettings = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openReview)) { _ in
+            showingReview = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .settingsDidChange)) { notification in
+            if let settings = notification.object as? PomodoroSettings {
+                keyboardManager.setEnabled(settings.enableGlobalShortcuts)
+            }
+        }
+        .onAppear {
+            keyboardManager.setEnabled(settingsViewModel.settings.enableGlobalShortcuts)
         }
     }
     

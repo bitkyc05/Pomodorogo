@@ -31,6 +31,10 @@ struct ControlsView: View {
                 Text(timerViewModel.isRunning ? "Pause" : "Start")
                     .font(.system(size: 16, weight: .semibold))
                 
+                Text("(Space)")
+                    .font(.caption)
+                    .opacity(0.7)
+                
                 Image(systemName: timerViewModel.isRunning ? "pause.fill" : "play.fill")
                     .font(.system(size: 20))
             }
@@ -64,6 +68,10 @@ struct ControlsView: View {
                 Text("Reset")
                     .font(.system(size: 16, weight: .semibold))
                 
+                Text("(R)")
+                    .font(.caption)
+                    .opacity(0.7)
+                
                 Image(systemName: "arrow.clockwise")
                     .font(.system(size: 18))
             }
@@ -92,6 +100,10 @@ struct ControlsView: View {
                 Text("Settings")
                     .font(.system(size: 14, weight: .medium))
                 
+                Text("(S)")
+                    .font(.caption2)
+                    .opacity(0.7)
+                
                 Image(systemName: "gear")
                     .font(.system(size: 16))
             }
@@ -112,6 +124,10 @@ struct ControlsView: View {
             HStack(spacing: 8) {
                 Text("Review")
                     .font(.system(size: 14, weight: .medium))
+                
+                Text("(V)")
+                    .font(.caption2)
+                    .opacity(0.7)
                 
                 Image(systemName: "chart.bar.fill")
                     .font(.system(size: 16))
