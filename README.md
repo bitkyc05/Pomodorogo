@@ -39,6 +39,7 @@ A sophisticated Pomodoro timer application built with SwiftUI for macOS. This ap
 - **Daily Review System**: Calendar-based review interface with mood tracking
 - **Achievement System**: Monitor productivity goals and achievements
 - **Historical Data**: Comprehensive session logs with actual vs planned duration
+- **Data Export**: Export all review data to JSON format for backup and analysis
 
 ## Technical Details
 
@@ -110,7 +111,13 @@ open Pomodorogo.xcodeproj
 
 ## Version History
 
-### v0.5.2 (Current) - Review Data Management
+### v0.5.3 (Current) - Data Export Feature
+- 📤 **Data Export**: Export all review data to JSON format for backup and analysis
+- 📱 **UI Enhancement**: Added export button to ReviewView toolbar
+- 🔒 **Security Enhancement**: Added file saving permissions to app entitlements
+- 💾 **Data Management**: Users can now backup and manage their productivity data
+
+### v0.5.2 - Review Data Management
 - 🗑️ **Delete All Reviews**: Added button to delete all review data with confirmation dialog
 - 🗑️ **Daily Delete**: Added button to delete specific date reviews from ReviewView
 - 🔄 **Data Reset**: Reset all existing data to provide clean initial state
