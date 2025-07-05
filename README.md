@@ -110,7 +110,13 @@ open Pomodorogo.xcodeproj
 
 ## Version History
 
-### v0.5 (Current) - Keyboard Shortcuts Implementation
+### v0.5.1 (Current) - App Icon Issue Fix
+- 🔧 **Critical Bug Fix**: Fixed missing app icon issue caused by invalid JSON in Contents.json
+- 🧹 **Build Cache Management**: Improved build cache handling to prevent asset compilation issues
+- ✅ **Asset Validation**: Ensured proper AppIcon.appiconset configuration for all macOS icon sizes
+- 🛠️ **Development Stability**: Enhanced development workflow with proper cache clearing procedures
+
+### v0.5 - Keyboard Shortcuts Implementation
 - ⌨️ **Global Keyboard Shortcuts**: Implemented NSEvent-based local keyboard shortcuts
 - 🎮 **Enhanced User Control**: Space (start/pause), R (reset), S (settings), V (review)
 - 🔧 **Smart Text Field Detection**: Shortcuts disabled during text editing
