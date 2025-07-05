@@ -5,7 +5,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-macOS%2013.0+-blue.svg)](https://developer.apple.com/swiftui/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.7.1-brightgreen.svg)](https://github.com/bitkyc05/Pomodorogo/releases)
+[![Version](https://img.shields.io/badge/version-v0.7.2-brightgreen.svg)](https://github.com/bitkyc05/Pomodorogo/releases)
 [![Platform](https://img.shields.io/badge/platform-macOS%2013.0+-lightgrey.svg)](https://developer.apple.com/macos/)
 
 **A sophisticated native macOS Pomodoro timer that transforms your productivity workflow**
@@ -179,7 +179,13 @@ open Pomodorogo.xcodeproj
 
 ## 📈 Version History
 
-### v0.7.1 (Latest) - Project Cleanup & Optimization
+### v0.7.2 (Latest) - App Restoration & Build Recovery
+- 🔧 **App Recovery**: Restored missing Pomodoro.app after cleanup
+- 📦 **Build Process**: Rebuilt app with all menu bar features intact
+- ✅ **Functionality Verified**: All v0.7.0 features working properly
+- 🚀 **Release Ready**: Complete app package available for download
+
+### v0.7.1 - Project Cleanup & Optimization
 - 🧹 **Repository Cleanup**: Removed unnecessary build artifacts and temporary files
 - 📁 **File Organization**: Deleted unused icon generation scripts and build directories
 - 🔧 **Development Cleanup**: Improved repository structure for better maintainability
