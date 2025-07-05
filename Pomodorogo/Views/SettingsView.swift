@@ -6,7 +6,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     // 타이머 지속시간 설정
@@ -24,6 +24,7 @@ struct SettingsView: View {
                     // 액션 버튼들
                     actionSection
                 }
+                .frame(maxWidth: .infinity, alignment: .top)
                 .padding()
             }
             .navigationTitle("Settings")
@@ -46,7 +47,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .frame(minWidth: 500, minHeight: 600)
+        .frame(width: 500, height: 600)
     }
     
     // MARK: - Timer Duration Section
@@ -91,6 +92,7 @@ struct SettingsView: View {
                 )
             }
         }
+        .frame(maxWidth: .infinity)
     }
     
     // MARK: - Notification Section
@@ -172,6 +174,7 @@ struct SettingsView: View {
                 .help("Shows periodic reminders to stay focused")
             */
         }
+        .frame(maxWidth: .infinity)
     }
     
     // MARK: - Ambient Sound Section
@@ -216,6 +219,7 @@ struct SettingsView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
     }
     
     // MARK: - Advanced Section
@@ -232,6 +236,7 @@ struct SettingsView: View {
             Toggle("Global Shortcuts", isOn: $settingsViewModel.settings.enableGlobalShortcuts)
                 .help("Enable keyboard shortcuts that work globally")
         }
+        .frame(maxWidth: .infinity)
     }
     
     // MARK: - Action Section
@@ -249,6 +254,7 @@ struct SettingsView: View {
                 Spacer()
             }
         }
+        .frame(maxWidth: .infinity)
     }
 }
 

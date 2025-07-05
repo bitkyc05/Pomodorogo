@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var showingSettings = false
     @State private var showingReview = false
     @State private var showingWorkAreas = false
+    @Environment(\.openWindow) private var openWindow
     
     var body: some View {
         ZStack {
@@ -27,11 +28,17 @@ struct ContentView: View {
         .background(.ultraThinMaterial)
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-        .sheet(isPresented: $showingSettings) {
-            SettingsView()
+        .onChange(of: showingSettings) { _, newValue in
+            if newValue {
+                openWindow(id: "settings")
+                showingSettings = false
+            }
         }
-        .sheet(isPresented: $showingReview) {
-            ReviewView()
+        .onChange(of: showingReview) { _, newValue in
+            if newValue {
+                openWindow(id: "review")
+                showingReview = false
+            }
         }
         .sheet(isPresented: $showingWorkAreas) {
             WorkAreaSelectionView()
