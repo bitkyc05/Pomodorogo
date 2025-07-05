@@ -37,12 +37,17 @@ class TimerViewModel: ObservableObject {
     @Published var streak: Int = 0
     @Published var currentWorkArea: String = "General Work"
     @Published var workAreas: [String] = ["General Work"]
+    @Published var isOvertimeMode: Bool = false
+    @Published var overtimeSeconds: Int = 0
     
     // MARK: - Private Properties
     private var timer: Timer?
     private var sessionStartTime: Date?
     private var sessionLogs: [PomodoroSession] = []
     private var cancellables = Set<AnyCancellable>()
+    private var elapsedWorkTime: TimeInterval = 0  // 순수 작업시간 (Date 기반 누적)
+    private var lastTickTimestamp: Date?           // 마지막 tick 시점
+    private var isInitialDurationReached: Bool = false  // 설정 시간 도달 여부
     
     // 모드별 지속시간 설정
     private var modeDurations: [TimerMode: Int] = [
@@ -69,6 +74,10 @@ class TimerViewModel: ObservableObject {
     // MARK: - Timer Control Methods
     func toggleTimer() {
         if isRunning {
+            // 휴식 모드에서는 일시정지 불가
+            if currentMode != .work {
+                return
+            }
             pauseTimer()
         } else {
             startTimer()
@@ -78,13 +87,10 @@ class TimerViewModel: ObservableObject {
     func startTimer() {
         isRunning = true
         sessionStartTime = sessionStartTime ?? Date()
+        lastTickTimestamp = Date()  // 재시작 시점으로 설정 (일시정지 시간 제외)
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.timeLeft -= 1
-            
-            if self.timeLeft <= 0 {
-                self.completeSession()
-            }
+            self.tick()
         }
         
         // 메뉴바 아이콘 업데이트
@@ -115,22 +121,73 @@ class TimerViewModel: ObservableObject {
     func resetTimer() {
         pauseTimer()
         sessionStartTime = nil
+        lastTickTimestamp = nil
         timeLeft = modeDurations[currentMode] ?? TimerMode.work.defaultDuration
+        isOvertimeMode = false
+        overtimeSeconds = 0
+        elapsedWorkTime = 0  // 순수 작업시간 리셋
+        isInitialDurationReached = false  // 플래그 리셋
+    }
+    
+    private func tick() {
+        guard let lastTick = lastTickTimestamp else { return }
+        
+        let now = Date()
+        let delta = now.timeIntervalSince(lastTick)
+        elapsedWorkTime += delta
+        lastTickTimestamp = now
+        
+        let plannedDuration = TimeInterval(modeDurations[currentMode] ?? 0)
+        
+        // 설정 시간 도달 체크 (첫 번째 알림)
+        if elapsedWorkTime >= plannedDuration && !isInitialDurationReached {
+            isInitialDurationReached = true
+            enterOvertimeMode()
+            
+            // 첫 번째 "띵" 소리 재생
+            sendNotification()
+            playSessionCompleteSound()
+        }
+        
+        // UI 업데이트용 시간 계산
+        if isOvertimeMode {
+            overtimeSeconds = Int(elapsedWorkTime - plannedDuration)
+            timeLeft = 0
+        } else {
+            let remaining = max(0, plannedDuration - elapsedWorkTime)
+            timeLeft = Int(remaining)
+        }
+    }
+    
+    private func enterOvertimeMode() {
+        isOvertimeMode = true
+        // overtimeSeconds와 timeLeft는 tick()에서 계산됨
+    }
+    
+    func stopOvertimeSession() {
+        completeSession()
+    }
+    
+    func stopBreakSession() {
+        // 휴식 모드에서 Stop 버튼 클릭 시 즉시 완료
+        completeSession()
     }
     
     private func completeSession() {
         pauseTimer()
         
         let endTime = Date()
-        let actualDuration = sessionStartTime != nil ? 
-            Int(endTime.timeIntervalSince(sessionStartTime!)) : 
-            modeDurations[currentMode] ?? 0
+        let plannedDuration = modeDurations[currentMode] ?? 0
+        
+        // 순수 작업시간 계산 (elapsedWorkTime 사용)
+        let pureWorkTime = Int(elapsedWorkTime)
         
         // 세션 로그 생성
         let session = PomodoroSession(
             type: currentMode,
-            plannedDuration: modeDurations[currentMode] ?? 0,
-            actualDuration: actualDuration,
+            plannedDuration: plannedDuration,
+            actualDuration: pureWorkTime,
+            overtimeSeconds: overtimeSeconds,
             startTime: sessionStartTime ?? endTime,
             endTime: endTime,
             workArea: currentWorkArea
@@ -138,11 +195,12 @@ class TimerViewModel: ObservableObject {
         
         sessionLogs.append(session)
         
-        // work 세션만 통계 업데이트
+        // 모든 모드에서 세션 완료 처리
         if currentMode == .work {
+            // work 세션 통계 업데이트
             completedSessions += 1
-            totalTime += actualDuration
-            streak += 1
+            totalTime += pureWorkTime  // 순수 작업시간만 통계에 반영
+            updateStreak()  // 스트릭 업데이트 (별도 함수로 분리)
             sessionNumber += 1
             
             // 4번째 작업 세션 후 긴 휴식, 아니면 짧은 휴식
@@ -157,6 +215,11 @@ class TimerViewModel: ObservableObject {
         }
         
         sessionStartTime = nil
+        lastTickTimestamp = nil
+        isOvertimeMode = false
+        overtimeSeconds = 0
+        elapsedWorkTime = 0  // 다음 세션을 위해 리셋
+        isInitialDurationReached = false  // 플래그 리셋
         
         saveStats()
         
@@ -171,6 +234,34 @@ class TimerViewModel: ObservableObject {
         
         // 소리 재생
         playSessionCompleteSound()
+    }
+    
+    // MARK: - Streak Management
+    private func updateStreak() {
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // 오늘 완료한 work 세션이 있는지 확인
+        let todayWorkSessions = sessionLogs.filter { session in
+            calendar.isDate(session.startTime, inSameDayAs: today) && session.type == .work
+        }
+        
+        // 오늘 첫 번째 work 세션이라면
+        if todayWorkSessions.count == 1 {
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+            let yesterdayWorkSessions = sessionLogs.filter { session in
+                calendar.isDate(session.startTime, inSameDayAs: yesterday) && session.type == .work
+            }
+            
+            if yesterdayWorkSessions.isEmpty {
+                // 어제 work 세션이 없었다면 스트릭 리셋
+                streak = 1
+            } else {
+                // 어제 work 세션이 있었다면 스트릭 증가
+                streak += 1
+            }
+        }
+        // 오늘 두 번째 이상의 work 세션이라면 스트릭 변경 없음
     }
     
     // MARK: - Mode Management
@@ -268,14 +359,24 @@ class TimerViewModel: ObservableObject {
     
     // MARK: - Computed Properties
     var formattedTime: String {
-        let minutes = timeLeft / 60
-        let seconds = timeLeft % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+        if isOvertimeMode {
+            let minutes = overtimeSeconds / 60
+            let seconds = overtimeSeconds % 60
+            return String(format: "+%02d:%02d", minutes, seconds)
+        } else {
+            let minutes = timeLeft / 60
+            let seconds = timeLeft % 60
+            return String(format: "%02d:%02d", minutes, seconds)
+        }
     }
     
     var progress: Double {
-        let totalDuration = modeDurations[currentMode] ?? 1
-        return Double(totalDuration - timeLeft) / Double(totalDuration)
+        if isOvertimeMode {
+            return 1.0
+        } else {
+            let totalDuration = modeDurations[currentMode] ?? 1
+            return Double(totalDuration - timeLeft) / Double(totalDuration)
+        }
     }
     
     var formattedTotalTime: String {
@@ -401,6 +502,7 @@ struct PomodoroSession {
     let type: TimerMode
     let plannedDuration: Int
     let actualDuration: Int
+    let overtimeSeconds: Int
     let startTime: Date
     let endTime: Date
     let workArea: String
@@ -410,7 +512,29 @@ struct PomodoroSession {
     var formattedDuration: String {
         let minutes = actualDuration / 60
         let seconds = actualDuration % 60
+        
+        if overtimeSeconds > 0 {
+            let overtimeMinutes = overtimeSeconds / 60
+            let overtimeSecs = overtimeSeconds % 60
+            return String(format: "%d:%02d (+%d:%02d)", minutes, seconds, overtimeMinutes, overtimeSecs)
+        } else {
+            return String(format: "%d:%02d", minutes, seconds)
+        }
+    }
+    
+    var pureWorkTimeFormatted: String {
+        let minutes = actualDuration / 60
+        let seconds = actualDuration % 60
         return String(format: "%d:%02d", minutes, seconds)
+    }
+    
+    var overtimeFormatted: String {
+        if overtimeSeconds > 0 {
+            let minutes = overtimeSeconds / 60
+            let seconds = overtimeSeconds % 60
+            return String(format: "+%d:%02d", minutes, seconds)
+        }
+        return ""
     }
     
     var formattedStartTime: String {

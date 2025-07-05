@@ -8,16 +8,26 @@ struct ControlsView: View {
     
     var body: some View {
         VStack(spacing: 15) {
-            // 메인 컨트롤 (시작/일시정지, 리셋)
-            HStack(spacing: 15) {
-                startPauseButton
-                resetButton
-            }
-            
-            // 보조 컨트롤 (설정, 리뷰)
-            HStack(spacing: 15) {
-                settingsButton
-                reviewButton
+            // 초과시간 모드가 아닐 때만 컨트롤 표시
+            if !timerViewModel.isOvertimeMode {
+                // 메인 컨트롤 (시작/일시정지, 리셋)
+                HStack(spacing: 15) {
+                    startPauseButton
+                    resetButton
+                }
+                
+                // 보조 컨트롤 (설정, 리뷰)
+                HStack(spacing: 15) {
+                    settingsButton
+                    reviewButton
+                }
+            } else {
+                // 초과시간 모드에서는 간단한 안내 메시지
+                Text("Time's up! Click STOP to complete session")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.orange)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
             }
         }
     }
@@ -25,18 +35,38 @@ struct ControlsView: View {
     // MARK: - Main Controls
     private var startPauseButton: some View {
         Button(action: {
-            timerViewModel.toggleTimer()
+            // 휴식 모드에서 Stop 버튼 클릭 시 세션 완료
+            if timerViewModel.currentMode != .work && timerViewModel.isRunning {
+                timerViewModel.stopBreakSession()
+            } else {
+                timerViewModel.toggleTimer()
+            }
         }) {
             HStack(spacing: 8) {
-                Text(timerViewModel.isRunning ? "Pause" : "Start")
-                    .font(.system(size: 16, weight: .semibold))
-                
-                Text("(Space)")
-                    .font(.caption)
-                    .opacity(0.7)
-                
-                Image(systemName: timerViewModel.isRunning ? "pause.fill" : "play.fill")
-                    .font(.system(size: 20))
+                // 휴식 모드와 work 모드 분리
+                if timerViewModel.currentMode != .work {
+                    // 휴식 모드: Start 또는 Stop만 표시
+                    Text(timerViewModel.isRunning ? "Stop" : "Start")
+                        .font(.system(size: 16, weight: .semibold))
+                    
+                    Text("(Break)")
+                        .font(.caption)
+                        .opacity(0.7)
+                    
+                    Image(systemName: timerViewModel.isRunning ? "stop.fill" : "play.fill")
+                        .font(.system(size: 20))
+                } else {
+                    // work 모드: 기존 Start/Pause 로직
+                    Text(timerViewModel.isRunning ? "Pause" : "Start")
+                        .font(.system(size: 16, weight: .semibold))
+                    
+                    Text("(Space)")
+                        .font(.caption)
+                        .opacity(0.7)
+                    
+                    Image(systemName: timerViewModel.isRunning ? "pause.fill" : "play.fill")
+                        .font(.system(size: 20))
+                }
             }
             .foregroundColor(.white)
             .frame(minWidth: 100)

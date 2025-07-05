@@ -48,8 +48,16 @@ struct TimerView: View {
             // 시간 표시
             timeDisplay
             
-            // 작업 영역 표시
-            workAreaDisplay
+            // 초과시간 모드에서 Stop 버튼 표시
+            if timerViewModel.isOvertimeMode {
+                overtimeStopButton
+            } else if timerViewModel.currentMode != .work && timerViewModel.isRunning {
+                // 휴식 모드에서 실행 중일 때 Stop 버튼 표시
+                breakStopButton
+            } else {
+                // 작업 영역 표시
+                workAreaDisplay
+            }
         }
     }
     
@@ -108,8 +116,52 @@ struct TimerView: View {
         .animation(.easeInOut(duration: 0.3), value: timerViewModel.isRunning)
     }
     
+    private var overtimeStopButton: some View {
+        Button(action: {
+            timerViewModel.stopOvertimeSession()
+        }) {
+            Text("STOP")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(Color.orange)
+                        .shadow(color: Color.orange.opacity(0.4), radius: 8)
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .scaleEffect(1.1)
+        .animation(.easeInOut(duration: 0.3), value: timerViewModel.isOvertimeMode)
+    }
+    
+    private var breakStopButton: some View {
+        Button(action: {
+            timerViewModel.stopBreakSession()
+        }) {
+            Text("STOP")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(currentModeColor)
+                        .shadow(color: currentModeColor.opacity(0.4), radius: 8)
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .scaleEffect(1.1)
+        .animation(.easeInOut(duration: 0.3), value: timerViewModel.isRunning)
+    }
+    
     // MARK: - Computed Properties
     private var currentModeColor: Color {
+        if timerViewModel.isOvertimeMode {
+            return .orange
+        }
+        
         switch timerViewModel.currentMode {
         case .work:
             return .red
