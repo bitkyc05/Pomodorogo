@@ -4,6 +4,8 @@ struct ReviewView: View {
     @EnvironmentObject var reviewViewModel: ReviewViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var selectedDate = Date()
+    @State private var showingDailyDeleteAlert = false
+    @State private var showingDeleteAllAlert = false
 
     var body: some View {
         NavigationStack {
@@ -26,7 +28,20 @@ struct ReviewView: View {
                     Button("Done") { dismiss() }
                 }
                 ToolbarItem(placement: .secondaryAction) {
-                    Button("📋 Export") { reviewViewModel.copyToClipboard() }
+                    Menu {
+                        Button("📋 Export") { 
+                            reviewViewModel.copyToClipboard() 
+                        }
+                        Divider()
+                        Button("🗑️ 데일리 삭제") { 
+                            showingDailyDeleteAlert = true
+                        }
+                        Button("🗑️ 전체 삭제") { 
+                            showingDeleteAllAlert = true
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
                 }
             }
         }
@@ -35,6 +50,22 @@ struct ReviewView: View {
         .onAppear {
             selectedDate = Date()
             reviewViewModel.selectDate(selectedDate)
+        }
+        .alert("데일리 삭제", isPresented: $showingDailyDeleteAlert) {
+            Button("취소", role: .cancel) { }
+            Button("삭제", role: .destructive) {
+                reviewViewModel.deleteDailyReview(for: selectedDate)
+            }
+        } message: {
+            Text("\(DateFormatter.localizedString(from: selectedDate, dateStyle: .medium, timeStyle: .none)) 날짜의 리뷰를 삭제하시겠습니까?")
+        }
+        .alert("전체 삭제", isPresented: $showingDeleteAllAlert) {
+            Button("취소", role: .cancel) { }
+            Button("삭제", role: .destructive) {
+                reviewViewModel.deleteAllReviews()
+            }
+        } message: {
+            Text("모든 리뷰 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")
         }
     }
 

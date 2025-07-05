@@ -174,6 +174,50 @@ class ReviewViewModel: ObservableObject {
         pasteboard.setString(exportText, forType: .string)
     }
     
+    // MARK: - Deletion Methods
+    func deleteAllReviews() {
+        reviews.removeAll()
+        monthlyStats.removeAll()
+        currentReview = DailyReview(date: selectedDate)
+        saveReviews()
+        generateMonthlyStats()
+    }
+    
+    func deleteDailyReview(for date: Date) {
+        let dateKey = dateFormatter.string(from: date)
+        reviews.removeValue(forKey: dateKey)
+        monthlyStats.removeValue(forKey: date)
+        
+        if calendar.isDate(date, inSameDayAs: selectedDate) {
+            currentReview = DailyReview(date: selectedDate)
+        }
+        
+        saveReviews()
+        generateMonthlyStats()
+    }
+    
+    func clearAllAppData() {
+        reviews.removeAll()
+        monthlyStats.removeAll()
+        currentReview = DailyReview(date: selectedDate)
+        
+        let keys = [
+            "dailyReviews",
+            "completedSessions",
+            "totalTime", 
+            "streak",
+            "sessionNumber",
+            "workAreas",
+            "currentWorkArea"
+        ]
+        
+        for key in keys {
+            userDefaults.removeObject(forKey: key)
+        }
+        
+        generateMonthlyStats()
+    }
+    
     // MARK: - Private Methods
     private func updateCurrentReview() {
         let dateKey = dateFormatter.string(from: selectedDate)

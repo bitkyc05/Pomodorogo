@@ -110,7 +110,14 @@ open Pomodorogo.xcodeproj
 
 ## Version History
 
-### v0.5.1 (Current) - App Icon Issue Fix
+### v0.5.2 (Current) - Review Data Management
+- 🗑️ **Delete All Reviews**: Added button to delete all review data with confirmation dialog
+- 🗑️ **Daily Delete**: Added button to delete specific date reviews from ReviewView
+- 🔄 **Data Reset**: Reset all existing data to provide clean initial state
+- 📱 **UI Enhancement**: Improved ReviewView toolbar with menu-based deletion options
+- ⚠️ **Safe Deletion**: Added confirmation alerts to prevent accidental data loss
+
+### v0.5.1 - App Icon Issue Fix
 - 🔧 **Critical Bug Fix**: Fixed missing app icon issue caused by invalid JSON in Contents.json
 - 🧹 **Build Cache Management**: Improved build cache handling to prevent asset compilation issues
 - ✅ **Asset Validation**: Ensured proper AppIcon.appiconset configuration for all macOS icon sizes
