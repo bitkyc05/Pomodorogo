@@ -44,11 +44,18 @@ class ReviewViewModel: ObservableObject {
     @Published var selectedDate = Date()
     @Published var currentReview = DailyReview(date: Date())
     @Published var monthlyStats: [Date: SessionStats] = [:]
+    @Published var selectedDateSessions: [PomodoroSession] = []
+    @Published var showingSessionReviewSheet = false
+    @Published var selectedSession: PomodoroSession?
     
     private var reviews: [String: DailyReview] = [:]
+    private var sessionReviewNotes: [UUID: String] = [:]
     private let userDefaults = UserDefaults.standard
     private let dateFormatter: DateFormatter
     private let calendar = Calendar.current
+    
+    // TimerViewModel 참조
+    weak var timerViewModel: TimerViewModel?
     
     // MARK: - Initialization
     init() {
@@ -56,14 +63,17 @@ class ReviewViewModel: ObservableObject {
         self.dateFormatter.dateFormat = "yyyy-MM-dd"
         
         loadReviews()
+        loadSessionReviewNotes()
         updateCurrentReview()
         generateMonthlyStats()
+        loadSessionsForSelectedDate()
     }
     
     // MARK: - Review Management
     func selectDate(_ date: Date) {
         selectedDate = date
         updateCurrentReview()
+        loadSessionsForSelectedDate()
     }
     
     func saveCurrentReview() {
@@ -91,6 +101,29 @@ class ReviewViewModel: ObservableObject {
     func hasReviewForDate(_ date: Date) -> Bool {
         let dateKey = dateFormatter.string(from: date)
         return reviews[dateKey] != nil
+    }
+    
+    // MARK: - Session Management
+    func loadSessionsForSelectedDate() {
+        guard let timerViewModel = timerViewModel else {
+            selectedDateSessions = []
+            return
+        }
+        selectedDateSessions = timerViewModel.getSessionsForDate(selectedDate)
+    }
+    
+    func selectSessionForReview(_ session: PomodoroSession) {
+        selectedSession = session
+        showingSessionReviewSheet = true
+    }
+    
+    func saveSessionReview(for sessionId: UUID, note: String) {
+        sessionReviewNotes[sessionId] = note
+        saveSessionReviewNotes()
+    }
+    
+    func getSessionReviewNote(for sessionId: UUID) -> String {
+        return sessionReviewNotes[sessionId] ?? ""
     }
     
     // MARK: - Calendar Helpers
@@ -344,6 +377,19 @@ class ReviewViewModel: ObservableObject {
     private func saveReviews() {
         if let encoded = try? JSONEncoder().encode(reviews) {
             userDefaults.set(encoded, forKey: "dailyReviews")
+        }
+    }
+    
+    private func loadSessionReviewNotes() {
+        if let data = userDefaults.data(forKey: "sessionReviewNotes"),
+           let decoded = try? JSONDecoder().decode([UUID: String].self, from: data) {
+            sessionReviewNotes = decoded
+        }
+    }
+    
+    private func saveSessionReviewNotes() {
+        if let encoded = try? JSONEncoder().encode(sessionReviewNotes) {
+            userDefaults.set(encoded, forKey: "sessionReviewNotes")
         }
     }
 }

@@ -24,6 +24,9 @@ struct PomodorogoApp: App {
                 .onAppear {
                     // Request notification permission
                     focusManager.requestNotificationPermission()
+                    
+                    // ReviewViewModel에 TimerViewModel 연결
+                    reviewViewModel.timerViewModel = timerViewModel
                 }
         }
         .windowResizability(.contentSize)

@@ -154,6 +154,12 @@ class TimerViewModel: ObservableObject {
         
         saveStats()
         
+        // 세션 완료 알림 발송
+        NotificationCenter.default.post(
+            name: .sessionCompleted,
+            object: session
+        )
+        
         // 알림 표시
         sendNotification()
         
@@ -178,6 +184,17 @@ class TimerViewModel: ObservableObject {
         sessionNumber = 1
         sessionLogs.removeAll()
         saveStats()
+    }
+    
+    func getSessionsForDate(_ date: Date) -> [PomodoroSession] {
+        let calendar = Calendar.current
+        return sessionLogs.filter { session in
+            calendar.isDate(session.startTime, inSameDayAs: date)
+        }
+    }
+    
+    func getAllSessions() -> [PomodoroSession] {
+        return sessionLogs
     }
     
     func resetTodayStats() {
@@ -331,6 +348,9 @@ class TimerViewModel: ObservableObject {
     }
     
     private func startAmbientSoundIfNeeded() {
+        // work 세션에서만 앰비언트 사운드 재생
+        guard currentMode == .work else { return }
+        
         // 앰비언트 사운드 설정 확인
         if let ambientRaw = UserDefaults.standard.string(forKey: "ambientSound"),
            let ambientSound = AmbientSound(rawValue: ambientRaw),
@@ -361,8 +381,14 @@ class TimerViewModel: ObservableObject {
     }
 }
 
+// MARK: - Notification Extensions
+extension Notification.Name {
+    static let sessionCompleted = Notification.Name("sessionCompleted")
+}
+
 // MARK: - 임시 PomodoroSession 구조체 (추후 Core Data 모델로 교체)
 struct PomodoroSession {
+    let id = UUID()
     let type: TimerMode
     let plannedDuration: Int
     let actualDuration: Int
@@ -370,4 +396,33 @@ struct PomodoroSession {
     let endTime: Date
     let workArea: String
     let completed: Bool = true
+    var reviewNote: String = ""
+    
+    var formattedDuration: String {
+        let minutes = actualDuration / 60
+        let seconds = actualDuration % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+    
+    var formattedStartTime: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: startTime)
+    }
+    
+    var typeDisplayName: String {
+        switch type {
+        case .work: return "Work"
+        case .shortBreak: return "Short Break"
+        case .longBreak: return "Long Break"
+        }
+    }
+    
+    var typeIcon: String {
+        switch type {
+        case .work: return "📚"
+        case .shortBreak: return "☕"
+        case .longBreak: return "🛋️"
+        }
+    }
 }

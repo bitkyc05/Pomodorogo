@@ -13,6 +13,7 @@ struct ReviewView: View {
                 VStack(spacing: 20) {
                     dateHeader
                     calendarView
+                    sessionLogsSection
                     reviewForm
                 }
                 .frame(maxWidth: .infinity, alignment: .top) // 가로 공간을 채우도록
@@ -54,7 +55,7 @@ struct ReviewView: View {
             }
         }
         // macOS 팝오버 기준 크기
-        .frame(width: 600, height: 700)
+        .frame(width: 600, height: 750)
         .onAppear {
             selectedDate = Date()
             reviewViewModel.selectDate(selectedDate)
@@ -74,6 +75,10 @@ struct ReviewView: View {
             }
         } message: {
             Text("모든 리뷰 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")
+        }
+        .sheet(isPresented: $reviewViewModel.showingSessionReviewSheet) {
+            SessionReviewSheet()
+                .environmentObject(reviewViewModel)
         }
     }
 
@@ -231,6 +236,34 @@ struct ReviewView: View {
         }
     }
 
+    // MARK: - Session Logs Section
+    private var sessionLogsSection: some View {
+        GroupBox("📊 Today's Sessions") {
+            if reviewViewModel.selectedDateSessions.isEmpty {
+                VStack {
+                    Image(systemName: "clock")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                    Text("No sessions recorded for this date")
+                        .foregroundColor(.secondary)
+                        .font(.subheadline)
+                }
+                .frame(height: 100)
+            } else {
+                LazyVStack(spacing: 8) {
+                    ForEach(reviewViewModel.selectedDateSessions, id: \.id) { session in
+                        SessionLogRow(session: session)
+                            .onTapGesture(count: 2) {
+                                reviewViewModel.selectSessionForReview(session)
+                            }
+                    }
+                }
+                .frame(maxHeight: 200)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
     // MARK: - Helper Methods
     private func previousMonth() {
         if let newDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) {
@@ -346,6 +379,156 @@ struct ReviewTextField: View {
                         }
                     }
                 )
+        }
+    }
+}
+
+// MARK: - Session Views
+struct SessionLogRow: View {
+    let session: PomodoroSession
+    @EnvironmentObject var reviewViewModel: ReviewViewModel
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            // 세션 타입 아이콘
+            Text(session.typeIcon)
+                .font(.title2)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                HStack {
+                    Text(session.typeDisplayName)
+                        .font(.headline)
+                        .foregroundColor(session.type == .work ? .primary : .secondary)
+                    
+                    Spacer()
+                    
+                    Text(session.formattedStartTime)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                HStack {
+                    Text("Duration: \(session.formattedDuration)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Spacer()
+                    
+                    if !reviewViewModel.getSessionReviewNote(for: session.id).isEmpty {
+                        Text("📝")
+                            .font(.caption)
+                    }
+                }
+            }
+            
+            if session.type == .work {
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 12)
+        .background(Color.secondary.opacity(0.05))
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(session.type == .work ? Color.blue.opacity(0.3) : Color.clear, lineWidth: 1)
+        )
+        .help(session.type == .work ? "Double-click to add review note" : "Break session")
+    }
+}
+
+struct SessionReviewSheet: View {
+    @EnvironmentObject var reviewViewModel: ReviewViewModel
+    @State private var reviewNote = ""
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                if let session = reviewViewModel.selectedSession {
+                    // 세션 정보
+                    VStack(spacing: 12) {
+                        HStack {
+                            Text(session.typeIcon)
+                                .font(.largeTitle)
+                            
+                            VStack(alignment: .leading) {
+                                Text(session.typeDisplayName)
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                
+                                Text("\(session.formattedStartTime) • \(session.formattedDuration)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(12)
+                    }
+                    
+                    // 리뷰 노트 작성
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("📝 Session Review")
+                            .font(.headline)
+                        
+                        TextEditor(text: $reviewNote)
+                            .font(.body)
+                            .padding(8)
+                            .background(Color.secondary.opacity(0.1))
+                            .cornerRadius(8)
+                            .frame(minHeight: 120)
+                            .overlay(
+                                Group {
+                                    if reviewNote.isEmpty {
+                                        VStack {
+                                            HStack {
+                                                Text("How did this session go? Any insights or notes...")
+                                                    .foregroundColor(.secondary)
+                                                    .allowsHitTesting(false)
+                                                    .padding(.leading, 4)
+                                                    .padding(.top, 8)
+                                                Spacer()
+                                            }
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                            )
+                    }
+                    
+                    Spacer()
+                }
+            }
+            .padding()
+            .navigationTitle("Session Review")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        if let session = reviewViewModel.selectedSession {
+                            reviewViewModel.saveSessionReview(for: session.id, note: reviewNote)
+                        }
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+        }
+        .frame(width: 400, height: 300)
+        .onAppear {
+            if let session = reviewViewModel.selectedSession {
+                reviewNote = reviewViewModel.getSessionReviewNote(for: session.id)
+            }
         }
     }
 }
