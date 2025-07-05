@@ -87,6 +87,9 @@ class TimerViewModel: ObservableObject {
             }
         }
         
+        // 메뉴바 아이콘 업데이트
+        MenuBarManager.shared.updateMenuBarIcon(for: currentMode, isRunning: true)
+        
         // 포커스 모드 시작 (설정에 따라)
         startFocusModeIfNeeded()
         // 앰비언트 사운드 시작 (설정에 따라)
@@ -98,6 +101,9 @@ class TimerViewModel: ObservableObject {
         isRunning = false
         timer?.invalidate()
         timer = nil
+        
+        // 메뉴바 아이콘 업데이트
+        MenuBarManager.shared.updateMenuBarIcon(for: currentMode, isRunning: false)
         
         // 포커스 모드 종료
         stopFocusModeIfNeeded()
@@ -173,6 +179,9 @@ class TimerViewModel: ObservableObject {
             pauseTimer()
             currentMode = mode
             timeLeft = modeDurations[mode] ?? mode.defaultDuration
+            
+            // 메뉴바 아이콘 업데이트 (모드 변경 시)
+            MenuBarManager.shared.updateMenuBarIcon(for: currentMode, isRunning: isRunning)
         }
     }
     

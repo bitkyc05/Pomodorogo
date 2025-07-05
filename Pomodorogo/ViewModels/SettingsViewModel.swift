@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import AppKit
 
 // MARK: - macOS 집중 모드 열거형
 enum MacOSFocusMode: String, CaseIterable {
@@ -157,9 +158,35 @@ class SettingsViewModel: ObservableObject {
     
     // MARK: - Public Methods
     func saveSettings() {
+        let previousMenuBarEnabled = userDefaults.object(forKey: "enableMenuBarApp") as? Bool ?? false
+        let previousHideDockIcon = userDefaults.object(forKey: "hideDockIcon") as? Bool ?? false
+        
         saveSettingsInternal()
+        
+        // 메뉴바 설정 변경 처리
+        if settings.enableMenuBarApp != previousMenuBarEnabled {
+            if settings.enableMenuBarApp {
+                MenuBarManager.shared.enableMenuBar()
+            } else {
+                MenuBarManager.shared.disableMenuBar()
+            }
+        }
+        
+        // 독 아이콘 숨김 설정 변경 처리
+        if settings.hideDockIcon != previousHideDockIcon {
+            updateDockIconVisibility()
+        }
+        
         // 타이머 ViewModel에게 설정 변경 알림
         NotificationCenter.default.post(name: .settingsDidChange, object: settings)
+    }
+    
+    private func updateDockIconVisibility() {
+        if settings.enableMenuBarApp && settings.hideDockIcon {
+            NSApp.setActivationPolicy(.accessory)
+        } else {
+            NSApp.setActivationPolicy(.regular)
+        }
     }
     
     func loadSettings() {

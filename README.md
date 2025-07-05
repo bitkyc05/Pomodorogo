@@ -1,222 +1,269 @@
-# 🍅 Pomodorogo - macOS Pomodoro Timer
+# 🍅 Pomodorogo - Native macOS Pomodoro Timer
 
 <div align="center">
 
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-macOS%2013.0+-blue.svg)](https://developer.apple.com/swiftui/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.6.0-brightgreen.svg)](https://github.com/bitkyc05/Pomodorogo/releases)
+[![Version](https://img.shields.io/badge/version-v0.7.0-brightgreen.svg)](https://github.com/bitkyc05/Pomodorogo/releases)
+[![Platform](https://img.shields.io/badge/platform-macOS%2013.0+-lightgrey.svg)](https://developer.apple.com/macos/)
 
-A sophisticated Pomodoro timer application built with SwiftUI for macOS. This app provides comprehensive productivity tracking, work area management, session review capabilities, and ambient sound support to enhance your focus sessions.
+**A sophisticated native macOS Pomodoro timer that transforms your productivity workflow**
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Version History](#version-history) • [Contributing](#contributing)
+Pomodorogo brings the time-tested Pomodoro Technique to your Mac with modern SwiftUI design, comprehensive tracking, and seamless macOS integration. Whether you're a developer, student, or knowledge worker, Pomodorogo helps you maintain focus and track your productivity journey.
+
+[Download Latest Release](https://github.com/bitkyc05/Pomodorogo/releases) • [Features](#-features) • [Screenshots](#-screenshots) • [Installation](#-installation)
 
 </div>
 
+## 🎯 Why Pomodorogo?
+
+- **🎨 Native macOS Experience**: Built with SwiftUI for smooth performance and system integration
+- **🔥 Menu Bar Integration**: Quick access from your menu bar without cluttering your dock
+- **📊 Smart Analytics**: Detailed session tracking with daily reviews and productivity insights  
+- **🎵 Focus Enhancement**: Built-in ambient sounds to boost concentration
+- **⚡ Keyboard-First**: Global shortcuts for seamless workflow integration
+- **📝 Session Reviews**: Reflect on your work with individual session notes
+
 ## 📱 Screenshots
 
-*Screenshots coming soon*
+> *Beautiful screenshots showcasing the app in action coming soon*
 
 ## ✨ Features
 
-### 🍅 Core Timer Functionality
-- **Pomodoro Timer**: 25-minute work sessions with 5-minute short breaks and 15-minute long breaks
-- **Session Management**: Automatic transitions between work and break periods
-- **Progress Tracking**: Visual circular progress indicator with real-time updates
-- **Session Counter**: Track current session number with automatic reset after long breaks
-- **Smart Statistics**: Only work sessions count toward productivity metrics
+### 🍅 **Core Timer Functionality**
+- **Pomodoro Timer**: Classic 25-minute work sessions with 5-minute short breaks and 15-minute long breaks
+- **Auto-Progression**: Intelligent transitions between work and break periods (4 work sessions → long break)
+- **Visual Progress**: Beautiful circular progress indicator with real-time countdown
+- **Session Management**: Track current session number with automatic cycle management
+- **Smart Statistics**: Only work sessions count toward productivity metrics (breaks excluded)
 
-### 🏢 Work Area Management
-- **Multiple Work Areas**: Organize your work by project or category
-- **Quick Switching**: Easily switch between different work areas
-- **Session Tracking**: Individual statistics for each work area
-- **Default Area**: "General Work" area always available
+### 🏢 **Work Area Management**
+- **Project Organization**: Create and manage multiple work areas (projects, subjects, clients)
+- **Quick Switching**: Effortlessly switch between different work contexts
+- **Individual Tracking**: Separate statistics and session logs for each work area
+- **Default Setup**: "General Work" area always available as fallback
 
-### 🎵 Sound System
-- **Notification Sounds**: Customizable session completion alerts
-- **Ambient Sounds**: Built-in ambient sounds for focus enhancement (work sessions only)
-  - 🌧️ Rain
-  - 🌊 Ocean waves
-  - 🌲 Forest sounds
-  - ☕ Cafe ambiance
-  - 📻 White noise
-- **Volume Control**: Adjustable volume for all sound types
-- **Auto-start**: Ambient sounds automatically start with work sessions
+### 🎵 **Advanced Audio System**
+- **Session Alerts**: Customizable completion sounds (Default Beep, Bell, Chime, or Silent)
+- **Ambient Soundscape**: Focus-enhancing background audio (work sessions only)
+  - 🌧️ **Rain**: Gentle rainfall for calm concentration
+  - 🌊 **Ocean**: Rhythmic waves for deep focus
+  - 🌲 **Forest**: Natural woodland ambiance
+  - ☕ **Cafe**: Coffee shop background chatter
+  - 📻 **White Noise**: Clean sound masking
+- **Volume Control**: Fine-tune ambient sound levels (0-100%)
+- **Auto-Start**: Ambient sounds begin automatically with work sessions
 
-### ⚙️ Settings & Customization
-- **Timer Durations**: Customize work, short break, and long break durations
-- **Notification Preferences**: Enable/disable notifications and choose sound types
-- **Advanced Options**: Menu bar app mode, global shortcuts, dock icon hiding
-- **Data Management**: Reset today's or all statistics from settings
+### 🖥️ **Menu Bar Integration**
+- **Status Bar Icon**: 🍅 icon shows current timer state in your menu bar
+- **Quick Controls**: Start, pause, reset timer without opening main window
+- **Popover Interface**: Compact timer view with full controls and statistics
+- **Context Menu**: Right-click for quick actions and app navigation
+- **Dynamic Icons**: Visual feedback for running/paused states
+- **Always Accessible**: Timer controls available even when app is minimized
 
-### 📊 Statistics & Review System
-- **Session Statistics**: Track completed sessions, total time, and current streak
-- **Daily Review System**: Calendar-based review interface with mood tracking
-- **Session Logs**: View detailed logs of all daily sessions (work and break)
-- **Individual Session Reviews**: Double-click work sessions to add review notes
-- **Achievement System**: Monitor productivity goals and achievements
-- **Historical Data**: Comprehensive session logs with actual vs planned duration
-- **Data Export**: Export all review data to JSON format for backup and analysis
+### ⌨️ **Powerful Keyboard Shortcuts**
+- **Global Shortcuts** (when app is focused):
+  - `Space`: Start/pause timer
+  - `R`: Reset current session
+  - `S`: Open settings
+  - `V`: Open review interface
+- **App Menu Shortcuts**:
+  - `⌘+Space`: Start/pause timer
+  - `⌘+R`: Reset timer
+  - `⌘+1/2/3`: Switch to Work/Short Break/Long Break
+  - `⌘+,`: Preferences
+  - `⌘+D`: Daily Review
 
-### ⌨️ Keyboard Shortcuts
-- **Space**: Start/pause timer (global shortcut)
-- **R**: Reset current session (global shortcut)
-- **S**: Open settings (global shortcut)
-- **V**: Open review interface (global shortcut)
-- **⌘+,**: Application preferences
+### 📊 **Comprehensive Analytics & Review**
+- **Session Statistics**: Track completed sessions, total focused time, and current streak
+- **Daily Review System**: Calendar-based interface for tracking daily productivity
+- **Session Logs**: Detailed view of all sessions (work and break) with timestamps
+- **Individual Session Reviews**: Double-click work sessions to add reflection notes
+- **Export Capabilities**: Backup all data to JSON format for external analysis
+- **Historical Tracking**: Long-term productivity trends and patterns
 
-*Note: Global shortcuts can be enabled/disabled in Settings > Advanced > Global Shortcuts*
-
-## 🔧 Technical Details
-
-### Architecture
-- **SwiftUI**: Modern declarative UI framework for macOS
-- **MVVM Pattern**: Clean separation of concerns with ViewModels
-- **Data Persistence**: UserDefaults for settings and lightweight data storage
-- **Combine Framework**: Reactive programming for state management
-
-### Audio Implementation
-- **AVFoundation**: Native audio framework for sound management
-- **Real-time Generation**: Programmatic ambient sound generation
-- **Background Playback**: Continuous ambient sound during work sessions
-- **System Integration**: Proper audio session handling for macOS
-
-### UI/UX Features
-- **Fixed Window Management**: Popup windows with consistent, non-resizable behavior
-- **Modern SwiftUI**: NavigationStack and contemporary UI patterns
-- **Responsive Design**: Content automatically fills available window space
-- **Dark Mode**: Native macOS dark mode support
-- **Glassmorphism**: Modern visual effects with backdrop blur
-- **Accessibility**: VoiceOver support and keyboard navigation
-- **Animations**: Smooth transitions and progress animations
+### ⚙️ **Customization & Settings**
+- **Timer Durations**: Customize work (1-60 min), short break (1-30 min), and long break (1-60 min)
+- **Notification System**: Toggle notifications and choose alert sounds
+- **Menu Bar Mode**: Enable/disable menu bar app with dock icon hiding
+- **Data Management**: Reset today's statistics or all data from settings
+- **Focus Mode Integration**: macOS Do Not Disturb mode activation
+- **Advanced Options**: Global shortcuts toggle and system integration preferences
 
 ## 💻 System Requirements
 
-- macOS 13.0 or later
-- Apple Silicon or Intel processor
-- 50MB available storage space
+- **macOS**: 13.0 (Ventura) or later
+- **Processor**: Apple Silicon (M1/M2) or Intel (64-bit)
+- **Storage**: 50MB available space
+- **Memory**: 100MB RAM (typical usage)
 
 ## 📦 Installation
 
-### Option 1: Download Release
-1. Go to [Releases](https://github.com/bitkyc05/Pomodorogo/releases)
-2. Download the latest `.app` file
-3. Move to Applications folder
-4. Right-click and select "Open" (first time only)
+### Option 1: Download Release (Recommended)
+1. Visit [Releases](https://github.com/bitkyc05/Pomodorogo/releases)
+2. Download the latest `Pomodorogo.app` file
+3. Drag to your **Applications** folder
+4. **First launch**: Right-click → "Open" (security verification)
+5. **Enable Menu Bar** (optional): Settings → Advanced → Enable Menu Bar App
 
 ### Option 2: Build from Source
-1. Clone the repository:
 ```bash
+# Clone the repository
 git clone https://github.com/bitkyc05/Pomodorogo.git
 cd Pomodorogo
-```
 
-2. Open the project in Xcode:
-```bash
+# Open in Xcode
 open Pomodorogo.xcodeproj
+
+# Build and run (⌘+R)
 ```
 
-3. Build and run the project (⌘+R)
-
-## 🚀 Usage
-
-### Basic Operation
-1. Select work mode (default: 25 minutes)
-2. Choose or create a work area
-3. Click the play button to start your focus session
-4. Take breaks when the timer completes
-5. Review your progress in the statistics section
-
-### Advanced Features
-- **Work Area Management**: Click on the work area name to switch between projects
-- **Daily Reviews**: Use the Review button to track your daily productivity
-- **Session Notes**: Double-click completed work sessions to add review notes
-- **Data Management**: Reset statistics from Settings > Data Management
-
-## 📈 Version History
-
-### v0.6.0 (Current) - Session Review & Enhanced Logging
-- 📊 **Session Logs**: View detailed daily session history (work and break sessions)
-- 📝 **Session Reviews**: Double-click work sessions to add individual review notes
-- 🔇 **Smart Ambient Audio**: Ambient sounds only play during work sessions, not breaks
-- 🐛 **Statistics Fix**: Break sessions no longer incorrectly count toward productivity stats
-- 💾 **Enhanced Data Persistence**: Session review notes are permanently saved
-- 🎨 **Improved UI**: Better session visualization with icons and timing information
-
-### v0.5.3 - Data Export Feature
-- 📤 **Data Export**: Export all review data to JSON format for backup and analysis
-- 📱 **UI Enhancement**: Added export button to ReviewView toolbar
-- 🔒 **Security Enhancement**: Added file saving permissions to app entitlements
-- 💾 **Data Management**: Users can now backup and manage their productivity data
-
-### v0.5.2 - Review Data Management
-- 🗑️ **Delete All Reviews**: Added button to delete all review data with confirmation dialog
-- 🗑️ **Daily Delete**: Added button to delete specific date reviews from ReviewView
-- 🔄 **Data Reset**: Reset all existing data to provide clean initial state
-- 📱 **UI Enhancement**: Improved ReviewView toolbar with menu-based deletion options
-- ⚠️ **Safe Deletion**: Added confirmation alerts to prevent accidental data loss
-
-### v0.5.1 - App Icon Issue Fix
-- 🔧 **Critical Bug Fix**: Fixed missing app icon issue caused by invalid JSON in Contents.json
-- 🧹 **Build Cache Management**: Improved build cache handling to prevent asset compilation issues
-- ✅ **Asset Validation**: Ensured proper AppIcon.appiconset configuration for all macOS icon sizes
-- 🛠️ **Development Stability**: Enhanced development workflow with proper cache clearing procedures
-
-### v0.5 - Keyboard Shortcuts Implementation
-- ⌨️ **Global Keyboard Shortcuts**: Implemented NSEvent-based local keyboard shortcuts
-- 🎮 **Enhanced User Control**: Space (start/pause), R (reset), S (settings), V (review)
-- 🔧 **Smart Text Field Detection**: Shortcuts disabled during text editing
-- ⚙️ **Settings Integration**: Toggle shortcuts on/off in Advanced settings
-- 🎯 **UI Indicators**: Added keyboard shortcut hints to all control buttons
-- ✅ **Comprehensive Testing**: Added KeyboardShortcutManagerTests for functionality validation
-- 📱 **App-focused Mode**: Shortcuts work when app is in focus for system safety
-
-## 🛠️ Development
-
-This project serves as a reference implementation for converting web-based Pomodoro applications to native macOS apps. It demonstrates best practices for:
-
-- SwiftUI app architecture
-- Audio system integration
-- Data persistence strategies
-- Responsive UI design
-- User experience optimization
-
-### Related Documentation
-- Web app reference implementation: `/pomodoro-app/`
-- Development logs: `Pomodoro-macOS-Development-Log.md`
-- Phase 2 planning: `Phase-2-Development-Plan.md`
-
-### Build Requirements
+**Requirements for building:**
 - Xcode 15.0+
 - Swift 5.9+
 - macOS Sonoma SDK
 
-## 🤝 Contributing
+## 🚀 Quick Start Guide
 
-This is a personal project for learning SwiftUI development. However, feedback and suggestions are welcome through issues.
+### 1. **Basic Operation**
+1. **Choose Work Area**: Select or create a work area for your current project
+2. **Start Session**: Click the play button or press `Space` to begin a 25-minute focus session
+3. **Take Breaks**: App automatically transitions to breaks after work sessions
+4. **Track Progress**: View your statistics in real-time
 
+### 2. **Menu Bar Setup** (Recommended)
+1. Open **Settings** → **Advanced**
+2. Enable **"Menu Bar App"**
+3. Optionally enable **"Hide Dock Icon"** for minimal interface
+4. Access timer from the 🍅 icon in your menu bar
+
+### 3. **Daily Review Workflow**
+1. Open **Review** tab or press `⌘+D`
+2. Select any date from the calendar
+3. View all sessions (work and break) for that day
+4. **Double-click work sessions** to add reflection notes
+5. Export data for external analysis if needed
+
+### 4. **Power User Tips**
+- **Global Shortcuts**: Keep app focused for `Space`, `R`, `S`, `V` shortcuts
+- **Menu Bar Mode**: Right-click menu bar icon for context menu
+- **Ambient Sounds**: Try different sounds to find your optimal focus environment
+- **Work Areas**: Create separate areas for different projects or subjects
+
+## 🔧 Architecture & Technical Details
+
+### **Frontend Architecture**
+- **SwiftUI**: Modern declarative UI framework for macOS
+- **MVVM Pattern**: Clean separation with ViewModels for business logic
+- **Combine Framework**: Reactive programming for state management
+- **AppKit Integration**: NSStatusItem for menu bar functionality
+
+### **Data & Persistence**
+- **UserDefaults**: Lightweight storage for settings and session data
+- **JSON Export**: Structured data export for backup and analysis
+- **Memory Efficient**: Optimized for long-running background operation
+
+### **Audio Implementation**
+- **AVFoundation**: Native audio framework for sound management
+- **Programmatic Generation**: Real-time ambient sound synthesis
+- **Background Playback**: Continuous audio during work sessions
+- **System Integration**: Proper audio session handling
+
+### **Menu Bar Integration**
+- **NSStatusItem**: Native macOS status bar integration
+- **Template Images**: Automatic dark/light mode adaptation
+- **Popover Interface**: Compact SwiftUI view in status bar
+- **Event Handling**: Mouse and keyboard interaction support
+
+## 📈 Version History
+
+### v0.7.0 (Latest) - Professional README & Documentation
+- 📚 **Professional Documentation**: Complete rewrite of README following GitHub best practices
+- 🎯 **Clear Value Proposition**: Enhanced project description with user-focused benefits
+- 📖 **Comprehensive Guide**: Added Quick Start Guide and Power User Tips
+- 🏗️ **Technical Architecture**: Detailed technical documentation for developers
+- 📞 **Community Support**: Added proper contact and support information
+- 🎨 **Visual Enhancement**: Better organization with emojis and structured sections
+
+### v0.6.0 - Menu Bar Integration & Enhanced Experience
+- 🖥️ **Menu Bar App**: Complete status bar integration with 🍅 icon and quick controls
+- 🎛️ **Custom App Menus**: Timer and Focus menus replacing standard File/Edit menus
+- ⌨️ **Enhanced Shortcuts**: New keyboard shortcuts with app menu integration
+- 📊 **Session Reviews**: Double-click work sessions to add individual review notes
+- 🔇 **Smart Audio**: Ambient sounds only during work sessions (not breaks)
+- 🐛 **Statistics Fix**: Break sessions no longer count toward productivity metrics
+- 🎨 **UI Polish**: Better visual feedback and status indicators
+
+### v0.5.3 - Data Export & Backup
+- 📤 **JSON Export**: Export all review data for backup and external analysis
+- 🔒 **Enhanced Security**: Proper file system permissions for data export
+- 📱 **UI Improvements**: Enhanced ReviewView with export functionality
+
+### v0.5.2 - Data Management
+- 🗑️ **Smart Deletion**: Delete all reviews or specific date data with confirmation
+- 🛡️ **Safe Operations**: Confirmation dialogs prevent accidental data loss
+- 🔄 **Clean Reset**: Comprehensive data reset functionality
+
+### v0.5.1 - Critical Bug Fixes
+- 🔧 **App Icon Fix**: Resolved missing app icon in release builds
+- 🧹 **Build Optimization**: Improved asset compilation and cache management
+
+### v0.5.0 - Keyboard Shortcuts Foundation
+- ⌨️ **Global Shortcuts**: Space, R, S, V shortcuts when app is focused
+- 🎮 **Smart Detection**: Shortcuts disabled during text input
+- ⚙️ **Settings Control**: Toggle shortcuts on/off in Advanced settings
+
+## 🛠️ Development & Contributing
+
+This project showcases modern macOS development practices and serves as a reference for:
+
+- **SwiftUI Architecture**: MVVM pattern with proper separation of concerns
+- **Menu Bar Integration**: NSStatusItem implementation with SwiftUI
+- **Audio System Design**: AVFoundation integration for ambient sounds
+- **Data Persistence**: UserDefaults and JSON export strategies
+- **User Experience**: Native macOS design patterns and interactions
+
+### **Development Setup**
+```bash
+git clone https://github.com/bitkyc05/Pomodorogo.git
+cd Pomodorogo
+open Pomodorogo.xcodeproj
+```
+
+### **Contributing Guidelines**
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'feat: Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Create Pull Request
 
 ## 📄 License
 
-This project is for educational purposes. Please respect the learning journey and use responsibly.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- Inspired by the Pomodoro Technique by Francesco Cirillo
-- Built with modern SwiftUI and macOS development practices
-- Uses programmatic audio generation for ambient sounds
+- **Francesco Cirillo** - Creator of the Pomodoro Technique
+- **Apple Developer Documentation** - SwiftUI and AppKit guidance
+- **macOS Human Interface Guidelines** - Design inspiration
+- **Open Source Community** - Continuous learning and inspiration
+
+## 📞 Contact & Support
+
+- **Issues**: [GitHub Issues](https://github.com/bitkyc05/Pomodorogo/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/bitkyc05/Pomodorogo/discussions)
+- **Author**: [GitHub Profile](https://github.com/bitkyc05)
 
 ---
 
 <div align="center">
 
-**Built with ❤️ using SwiftUI and modern macOS development practices**
+**🍅 Built with passion for productivity and focus**
 
-[⬆ Back to top](#-pomodorogo---macos-pomodoro-timer)
+*Transform your work sessions into focused, productive experiences*
+
+[⬆ Back to top](#-pomodorogo---native-macos-pomodoro-timer)
 
 </div>
