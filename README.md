@@ -189,7 +189,15 @@ open Pomodorogo.xcodeproj
 
 ## 📈 Version History
 
-### v0.7.2 (Latest) - App Restoration & Build Recovery
+### v0.8.0 (Latest) - Precise Time Tracking & Overtime Mode
+- ⏱️ **Precise Time Tracking**: Date.now() based calculation excludes pause time from session recording
+- 🚀 **Overtime Mode**: Continue working beyond set time with separate overtime tracking
+- 🎯 **Smart Notifications**: Alerts trigger only when pure work time is completed (not wall-clock time)
+- 📊 **Dual Time Display**: Session format shows pure work time + overtime (e.g., "25:00 (+3:15)")
+- 🔄 **Mode-Specific Controls**: Work mode supports pause/resume, break mode uses start/stop workflow
+- 📈 **Enhanced Analytics**: Accurate productivity metrics with pause time exclusion
+
+### v0.7.2 - App Restoration & Build Recovery
 - 🔧 **App Recovery**: Restored missing Pomodoro.app after cleanup
 - 📦 **Build Process**: Rebuilt app with all menu bar features intact
 - ✅ **Functionality Verified**: All v0.7.0 features working properly
