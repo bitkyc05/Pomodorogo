@@ -170,6 +170,16 @@ class TimerViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Statistics Management
+    func resetAllStats() {
+        completedSessions = 0
+        totalTime = 0
+        streak = 0
+        sessionNumber = 1
+        sessionLogs.removeAll()
+        saveStats()
+    }
+    
     // MARK: - Work Area Management
     func addWorkArea(_ name: String) {
         if !workAreas.contains(name) {
