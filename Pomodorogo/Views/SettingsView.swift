@@ -21,6 +21,9 @@ struct SettingsView: View {
                     // 고급 설정
                     advancedSection
                     
+                    // 데이터 관리 설정
+                    dataManagementSection
+                    
                     // 액션 버튼들
                     actionSection
                 }
@@ -235,6 +238,52 @@ struct SettingsView: View {
             
             Toggle("Global Shortcuts", isOn: $settingsViewModel.settings.enableGlobalShortcuts)
                 .help("Enable keyboard shortcuts that work globally")
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    // MARK: - Data Management Section
+    private var dataManagementSection: some View {
+        GroupBox("Data Management") {
+            VStack(spacing: 12) {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Reset Today's Statistics")
+                            .font(.headline)
+                        Text("Remove today's completed sessions and statistics")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    Button("Reset Today") {
+                        timerViewModel.resetTodayStats()
+                    }
+                    .buttonStyle(.bordered)
+                    .foregroundColor(.orange)
+                }
+                
+                Divider()
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Reset All Statistics")
+                            .font(.headline)
+                        Text("Remove all sessions and reset counters to zero")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    Button("Reset All") {
+                        timerViewModel.resetAllStats()
+                    }
+                    .buttonStyle(.bordered)
+                    .foregroundColor(.red)
+                }
+            }
         }
         .frame(maxWidth: .infinity)
     }

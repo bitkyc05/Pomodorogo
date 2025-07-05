@@ -180,6 +180,35 @@ class TimerViewModel: ObservableObject {
         saveStats()
     }
     
+    func resetTodayStats() {
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // 오늘 생성된 세션들만 필터링해서 제거
+        let todaySessions = sessionLogs.filter { session in
+            calendar.isDate(session.startTime, inSameDayAs: today)
+        }
+        
+        // 오늘 세션들을 전체 로그에서 제거
+        sessionLogs.removeAll { session in
+            calendar.isDate(session.startTime, inSameDayAs: today)
+        }
+        
+        // 오늘 세션들의 통계를 전체 통계에서 차감
+        let todayCompletedSessions = todaySessions.count
+        let todayTotalTime = todaySessions.reduce(0) { $0 + $1.actualDuration }
+        
+        completedSessions = max(0, completedSessions - todayCompletedSessions)
+        totalTime = max(0, totalTime - todayTotalTime)
+        
+        // 스트릭은 오늘 세션이 있었다면 0으로 리셋 (연속성이 끊어짐)
+        if !todaySessions.isEmpty {
+            streak = 0
+        }
+        
+        saveStats()
+    }
+    
     // MARK: - Work Area Management
     func addWorkArea(_ name: String) {
         if !workAreas.contains(name) {

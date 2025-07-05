@@ -2,7 +2,6 @@ import SwiftUI
 
 struct StatsView: View {
     @EnvironmentObject var timerViewModel: TimerViewModel
-    @State private var showingResetAlert = false
     
     var body: some View {
         HStack(spacing: 20) {
@@ -29,17 +28,6 @@ struct StatsView: View {
                 color: .orange,
                 icon: "flame.fill"
             )
-        }
-        .onLongPressGesture(minimumDuration: 2.0) {
-            showingResetAlert = true
-        }
-        .alert("Reset Statistics", isPresented: $showingResetAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Reset", role: .destructive) {
-                timerViewModel.resetAllStats()
-            }
-        } message: {
-            Text("Are you sure you want to reset all statistics? This action cannot be undone.")
         }
     }
 }
