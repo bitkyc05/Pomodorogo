@@ -132,13 +132,11 @@ class TimerViewModel: ObservableObject {
         
         sessionLogs.append(session)
         
-        // 통계 업데이트
-        completedSessions += 1
-        totalTime += actualDuration
-        streak += 1
-        sessionStartTime = nil
-        
+        // work 세션만 통계 업데이트
         if currentMode == .work {
+            completedSessions += 1
+            totalTime += actualDuration
+            streak += 1
             sessionNumber += 1
             
             // 4번째 작업 세션 후 긴 휴식, 아니면 짧은 휴식
@@ -151,6 +149,8 @@ class TimerViewModel: ObservableObject {
             // 휴식 후 작업으로 복귀
             switchMode(.work)
         }
+        
+        sessionStartTime = nil
         
         saveStats()
         
@@ -184,25 +184,25 @@ class TimerViewModel: ObservableObject {
         let calendar = Calendar.current
         let today = Date()
         
-        // 오늘 생성된 세션들만 필터링해서 제거
-        let todaySessions = sessionLogs.filter { session in
-            calendar.isDate(session.startTime, inSameDayAs: today)
+        // 오늘 생성된 work 세션들만 필터링해서 제거
+        let todayWorkSessions = sessionLogs.filter { session in
+            calendar.isDate(session.startTime, inSameDayAs: today) && session.type == .work
         }
         
-        // 오늘 세션들을 전체 로그에서 제거
+        // 오늘 모든 세션들을 전체 로그에서 제거 (work, break 포함)
         sessionLogs.removeAll { session in
             calendar.isDate(session.startTime, inSameDayAs: today)
         }
         
-        // 오늘 세션들의 통계를 전체 통계에서 차감
-        let todayCompletedSessions = todaySessions.count
-        let todayTotalTime = todaySessions.reduce(0) { $0 + $1.actualDuration }
+        // 오늘 work 세션들의 통계만 전체 통계에서 차감
+        let todayCompletedSessions = todayWorkSessions.count
+        let todayTotalTime = todayWorkSessions.reduce(0) { $0 + $1.actualDuration }
         
         completedSessions = max(0, completedSessions - todayCompletedSessions)
         totalTime = max(0, totalTime - todayTotalTime)
         
-        // 스트릭은 오늘 세션이 있었다면 0으로 리셋 (연속성이 끊어짐)
-        if !todaySessions.isEmpty {
+        // 스트릭은 오늘 work 세션이 있었다면 0으로 리셋 (연속성이 끊어짐)
+        if !todayWorkSessions.isEmpty {
             streak = 0
         }
         
