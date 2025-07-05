@@ -5,7 +5,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-macOS%2013.0+-blue.svg)](https://developer.apple.com/swiftui/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.7.2-brightgreen.svg)](https://github.com/bitkyc05/Pomodorogo/releases)
+[![Version](https://img.shields.io/badge/version-v0.8.0-brightgreen.svg)](https://github.com/bitkyc05/Pomodorogo/releases)
 [![Platform](https://img.shields.io/badge/platform-macOS%2013.0+-lightgrey.svg)](https://developer.apple.com/macos/)
 
 **A sophisticated native macOS Pomodoro timer that transforms your productivity workflow**
@@ -33,10 +33,13 @@ Pomodorogo brings the time-tested Pomodoro Technique to your Mac with modern Swi
 
 ### 🍅 **Core Timer Functionality**
 - **Pomodoro Timer**: Classic 25-minute work sessions with 5-minute short breaks and 15-minute long breaks
+- **Precise Time Tracking**: Date.now() based calculation excludes pause time for accurate session recording
+- **Overtime Mode**: Continue working beyond set time with separate overtime tracking
 - **Auto-Progression**: Intelligent transitions between work and break periods (4 work sessions → long break)
 - **Visual Progress**: Beautiful circular progress indicator with real-time countdown
 - **Session Management**: Track current session number with automatic cycle management
 - **Smart Statistics**: Only work sessions count toward productivity metrics (breaks excluded)
+- **Dual Time Display**: Session format shows pure work time + overtime (e.g., "25:00 (+3:15)")
 
 ### 🏢 **Work Area Management**
 - **Project Organization**: Create and manage multiple work areas (projects, subjects, clients)
@@ -45,7 +48,9 @@ Pomodorogo brings the time-tested Pomodoro Technique to your Mac with modern Swi
 - **Default Setup**: "General Work" area always available as fallback
 
 ### 🎵 **Advanced Audio System**
-- **Session Alerts**: Customizable completion sounds (Default Beep, Bell, Chime, or Silent)
+- **Smart Session Alerts**: Notifications trigger only when pure work time is completed (not wall-clock time)
+- **Dual Notification System**: First alert when target time reached, second when overtime session stops
+- **Customizable Completion Sounds**: Default Beep, Bell, Chime, or Silent options
 - **Ambient Soundscape**: Focus-enhancing background audio (work sessions only)
   - 🌧️ **Rain**: Gentle rainfall for calm concentration
   - 🌊 **Ocean**: Rhythmic waves for deep focus
@@ -65,7 +70,7 @@ Pomodorogo brings the time-tested Pomodoro Technique to your Mac with modern Swi
 
 ### ⌨️ **Powerful Keyboard Shortcuts**
 - **Global Shortcuts** (when app is focused):
-  - `Space`: Start/pause timer
+  - `Space`: Start/pause timer (work mode) or Start/Stop (break mode)
   - `R`: Reset current session
   - `S`: Open settings
   - `V`: Open review interface
@@ -75,11 +80,16 @@ Pomodorogo brings the time-tested Pomodoro Technique to your Mac with modern Swi
   - `⌘+1/2/3`: Switch to Work/Short Break/Long Break
   - `⌘+,`: Preferences
   - `⌘+D`: Daily Review
+- **Mode-Specific Controls**:
+  - **Work Mode**: Full pause/resume functionality for flexible timing
+  - **Break Mode**: Simple Start/Stop workflow (no pause option)
 
 ### 📊 **Comprehensive Analytics & Review**
 - **Session Statistics**: Track completed sessions, total focused time, and current streak
+- **Smart Streak Calculation**: Daily continuity tracking (resets if no work sessions for a day)
+- **Precise Time Recording**: Pure work time + overtime separated for accurate productivity metrics
 - **Daily Review System**: Calendar-based interface for tracking daily productivity
-- **Session Logs**: Detailed view of all sessions (work and break) with timestamps
+- **Session Logs**: Detailed view of all sessions with dual time format (e.g., "25:03 (+2:15)")
 - **Individual Session Reviews**: Double-click work sessions to add reflection notes
 - **Export Capabilities**: Backup all data to JSON format for external analysis
 - **Historical Tracking**: Long-term productivity trends and patterns
