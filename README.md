@@ -55,7 +55,9 @@ A sophisticated Pomodoro timer application built with SwiftUI for macOS. This ap
 - **System Integration**: Proper audio session handling for macOS
 
 ### UI/UX Features
-- **Responsive Design**: Adaptive layout supporting various window sizes
+- **Fixed Window Management**: Popup windows with consistent, non-resizable behavior
+- **Modern SwiftUI**: NavigationStack and contemporary UI patterns
+- **Responsive Design**: Content automatically fills available window space
 - **Dark Mode**: Native macOS dark mode support
 - **Glassmorphism**: Modern visual effects with backdrop blur
 - **Accessibility**: VoiceOver support and keyboard navigation
@@ -71,7 +73,7 @@ A sophisticated Pomodoro timer application built with SwiftUI for macOS. This ap
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/jun/Pomodorogo.git
+git clone https://github.com/bitkyc05/Pomodorogo.git
 cd Pomodorogo
 ```
 
@@ -106,7 +108,20 @@ open Pomodorogo.xcodeproj
 
 ## Version History
 
-### v0.2 (Current)
+### v0.4.1 (Current)
+- 📄 Updated documentation and README
+- 🔧 Minor version maintenance update
+
+### v0.4 - UI/UX Major Improvements
+- 🪟 **Fixed popup window resizing issues**: Implemented separate WindowGroup for Settings and Review
+- 🚫 **Prevented user window resizing**: Added `windowResizability(.contentSize)` for consistent UI
+- 🎨 **Modern SwiftUI patterns**: Replaced NavigationView with NavigationStack
+- 📐 **Improved layout consistency**: Added `frame(maxWidth: .infinity)` to all sections
+- ✨ **Enhanced popup content**: Content now properly fills window width
+- 🗓️ **Optimized calendar grid**: Better spacing and aspect ratio handling
+- 🎯 **Better user experience**: Consistent popup behavior across all windows
+
+### v0.3 - Audio & Responsive Design
 - ✅ Fixed ambient sound not starting with timer sessions
 - ✅ Added responsive UI that adapts to window size changes
 - ✅ Improved sound system integration
@@ -114,11 +129,14 @@ open Pomodorogo.xcodeproj
 - ✅ Added dynamic font sizing based on window geometry
 - ✅ Implemented proper session completion sound playback
 
-### v0.1 (Initial Release)
-- ✅ Core Pomodoro timer functionality
+### v0.2 - Work Areas & Statistics
 - ✅ Work area management system
+- ✅ Enhanced statistics tracking
+- ✅ Daily review system with calendar interface
+
+### v0.1 - Initial Release
+- ✅ Core Pomodoro timer functionality
 - ✅ Basic settings and preferences
-- ✅ Statistics tracking
 - ✅ Sound system foundation
 
 ## Development
